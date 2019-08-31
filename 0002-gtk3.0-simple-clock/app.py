@@ -1,6 +1,6 @@
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GObject
 
 import time, datetime
 
@@ -33,8 +33,18 @@ class Window(Gtk.Window):
 
         self.add(hbox)
 
+    def redraw(self):
+        self.label11.set_label('<span size="50000">' + str(datetime.datetime.now().date()) + '</span>')
+        self.label21.set_label('<span size="50000">' + str(datetime.datetime.now().time()) + '</span>')
+        return True
+        
+    def start_refresh_clock_timer(self):
+        GObject.timeout_add(1000, self.redraw)        
+        return True
+
 win = Window()
 win.connect("delete-event", Gtk.main_quit)
 # self.fullscreen()
+win.start_refresh_clock_timer()
 win.show_all()
 Gtk.main()
